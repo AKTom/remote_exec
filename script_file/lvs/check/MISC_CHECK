@@ -1,0 +1,5 @@
+MISC_CHECK { 
+	misc_path "/opt/mytools/check_web.sh web1" #脚本名，需全路径
+	misc_timeout 30             #脚本执行的超时时间 
+	misc_dynamic                  #动态调整服务器权重 
+}

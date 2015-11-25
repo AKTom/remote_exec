@@ -1,0 +1,7 @@
+inhibit_on_failure #在服务器健康检查失效时，将其设为0
+TCP_CHECK {
+	connect_timeout 5 #连接超时时间
+	nb_get_retry 3#重连次数
+	delay_before_retry 3 #重连间隔时间
+	connect_port 80 #健康检查的端口
+}

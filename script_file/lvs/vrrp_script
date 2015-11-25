@@ -1,0 +1,38 @@
+global_defs { 
+   notification_email { 
+     acassen@firewall.loc 
+     failover@firewall.loc 
+     sysadmin@firewall.loc 
+   } 
+   notification_email_from Alexandre.Cassen@firewall.loc 
+   smtp_server 192.168.200.1 
+   smtp_connect_timeout 30 
+   router_id LVS_DEVEL 
+} 
+ 
+vrrp_script chk_port {        //自己定义的脚本 
+        script "/opt/tomcat.sh"   
+        interval 2 
+        weight 2 
+} 
+ 
+vrrp_instance VI_1 { 
+    state BACKUP //使用BACKUP状态 
+    interface eth0 
+    virtual_router_id 51   
+    priority 100 
+    mcast_src_ip 10.254.41.110  //使用eth0作为广播源地址 
+    advert_int 1 
+    authentication { 
+        auth_type PASS 
+        auth_pass 1234   
+    } 
+ 
+    track_script { 
+        chk_port 
+        } 
+ 
+    virtual_ipaddress { 
+        10.254.41.200 
+    } 
+} 

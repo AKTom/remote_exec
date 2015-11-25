@@ -84,10 +84,10 @@ def getHost():
     return data
 def man():
     getHost()
-    print data
+#    print data
     for ip_list in data:
         print ip_list["ip"]
-    print '''\033[32;1m1\033[0m-cmd\n\033[32;1m2\033[0m-scp'''
+    print '''\033[32;1m1\033[0m-Command\n\033[32;1m2\033[0m-Supper Command\n\033[32;1m3\033[0m-Uploadfile'''
     option=''
     while not option:
         option=raw_input('\033[32;1mWhat do you do?Please choose 1,2 or 3... \033[0m').strip()

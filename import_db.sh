@@ -3,7 +3,7 @@ USERNAME="tools"
 PASSWORD="123456"
 DBNAME="tools" #要创建的数据库的库名称
 TABLENAME="tool_ip" #要创建的数据库的表的名称
-file="/opt/web/project/ip_list.txt"
+file="./tool_ip.txt"
 
 MYSQL_CMD="mysql -u${USERNAME} -p${PASSWORD}"
 
@@ -23,8 +23,9 @@ fi
 #特殊字段处理例句如下，如下句将password字段进行加密处理：
 #import_table_sql="load data local infile '${file}' replace into table tool_ip fields terminated by '\t'(ip,hostname,port,username,password) set password=password('password');"
 #import_table_sql="load data local infile '${file}' replace into table tool_ip fields terminated by '\t'(ip,hostname,port,username,password) set password=aes_encrypt(password,'password');"
-import_table_sql="load data local infile '${file}' replace into table tool_ip fields terminated by '\t';"
-echo ${import_table_sql}|${MYSQL_CMD} ${DBNAME}
+#import_table_sql="load data local infile '${file}' replace into table tool_ip fields terminated by '\t';"
+#echo ${import_table_sql}|${MYSQL_CMD} ${DBNAME}
+mysqlimport -u${USERNAME} -p${PASSWORD} --local --fields-terminated-by="\t" ${DBNAME} ${file}
 if [ $? -ne 0 ] #判断是否导入成功
 then
         echo "import  table ${DBNAME}.${TABLENAME}  \033[31;1mfailed \033[0m ..."

@@ -11,6 +11,8 @@ def ssh(ip,port,user,passwd,cmd):
        stdin, stdout, stderr = client.exec_command(cmd)  
        for line in stdout:  
            print "\033[36;1m%-18s-->>  \033[0m" %ip +line.strip('\n')  
+       for line in stderr:  
+           print "\033[36;1m%-18s-->>  \033[0m" %ip +line.strip('\n')  
     except Exception,e:
         print "\033[31;1m%-18s%s:%s\033[0m" % (ip,e.__class__, e)
     client.close()  
@@ -27,10 +29,10 @@ def sshChannel(ip,port,user,passwd,cmd,rootpd):
        channel = client.invoke_shell()
        channel.settimeout(10)
 
-       resp = ''
        channel.send('su -\n')
        buff = ''
-       while not buff.endswith(passinfo):
+       resp = ''
+       while not resp.endswith(passinfo):
            try:
               resp = channel.recv(9999)
            except Exception,e:
@@ -38,21 +40,19 @@ def sshChannel(ip,port,user,passwd,cmd,rootpd):
               channel.close()
               client.close()
               sys.exit()
-           buff +=resp
-
+       #    buff +=resp
        channel.send(rootpd+'\n')
-       buff = ''
-       while not buff.endswith('# '):
+       resp = ''
+       while not resp.endswith('# '):
            resp = channel.recv(9999)
-           if not resp.find('$ ')==-1:
+           #if not resp.find('$ ')==-1:
+           if resp.endswith('$ '):
               print '\n\033[31;1m%-18sError info: (Super)Authentincation failed.\033[0m' % (ip)
               channel.close()
               client.close()
               sys.exit()
-           buff +=resp
-
+       #    buff +=resp
        channel.send(cmd+'\n')
-       buff = ''
        resp = ''
        try:
            while not buff.endswith('# '):
@@ -60,9 +60,11 @@ def sshChannel(ip,port,user,passwd,cmd,rootpd):
               buff +=resp
        except Exception, e:
            print "\n\033[31;1m%-18s%s:%s\033[0m" % (ip,e.__class__, e)
-       print "\n\033[36;1m%-18s-->>  \033[0m" %ip +buff.strip('\n')
        channel.close()
        client.close()
+#       print buff.split('\r\n')
+       for i in (buff.split('\r\n'))[1:]:
+           if not i.endswith('# '):print "\033[36;1m%-18s-->>  \033[0m" %ip + i
     except Exception,e:
         print "\n\033[31;1m%-18s%s:%s\033[0m" % (ip,e.__class__, e)
     client.close() 

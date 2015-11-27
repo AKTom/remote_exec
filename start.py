@@ -1,4 +1,4 @@
-#!/usr/bin/env ipython
+#!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 #__author__ = 'li90.com'
 import threading
@@ -7,6 +7,7 @@ import ssh_cmd
 import sys
 import getpass
 import scp_cmd
+import tab
 def whichColumn(likeString):
     for likeColumn in ('ip','hostname','mark'):
         if n.query('ip','tool_ip',likeColumn,likeString):
@@ -30,9 +31,11 @@ def startThread(data,TARGET,ARGS):
 def cmdInput(function,otherArgs=''):
     print 'You choose 2,Now began to execute the \033[32;1mShell\033[0m command...'
     cmd=''
+    if not otherArgs:Prompt='$'
+    else:Prompt='#'
     while True:
         tmp=''
-        tmp=raw_input('\033[33;1mPlease enter your command \033[0m').strip()
+        tmp=raw_input('\033[33;1mPlease enter your command ]\033[0m'+Prompt+' ').strip()
         if not tmp:continue
         elif (tmp=='q' or tmp=='quit' or tmp=='exit'):
             print "You quit the command mode"
@@ -97,7 +100,8 @@ def man():
         if option=='1':
             cmdInput(ssh_cmd.ssh)
         if option=='2':
-            rootpd=getpass.getpass('Enter Supper password: ')
+            rootpd=''
+            while not rootpd:rootpd=getpass.getpass('Enter Supper password: ')
             cmdInput(ssh_cmd.sshChannel,rootpd)
         if option=='3':
             transfer()

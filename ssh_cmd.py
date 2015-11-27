@@ -4,6 +4,7 @@ import paramiko
 import os,sys
 
 def ssh(ip,port,user,passwd,cmd):  
+#    print type(cmd),cmd
     client = paramiko.SSHClient()  
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())  
     try:

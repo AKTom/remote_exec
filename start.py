@@ -18,10 +18,13 @@ def startThread(data,TARGET,ARGS):
     for a in data:
         args_1=(a['ip'],int(a['port']),a['username'],a['password'])
         args_2=list(args_1)
+#        print type(ARGS),ARGS
         for i in list(ARGS):
+#            print type(i),i
             if not i:continue
             args_2.append(i)
         args=tuple(args_2)
+#        print type(args),args
         th=threading.Thread(target=TARGET,args=args)
         res_list.append(th)
         th.start()
@@ -43,7 +46,7 @@ def cmdInput(function,otherArgs=''):
         elif (tmp != 'end'):
            cmd +=tmp + '\n'
            continue
-#        print cmd
+#        print type(cmd),cmd
         startThread(data,function,(cmd,otherArgs))
         cmd=''
 def transfer():
@@ -87,7 +90,7 @@ def getHost():
     return data
 def man():
     getHost()
-#    print data
+    #print data
     for ip_list in data:
         print ip_list["ip"]
     print '''\033[32;1m1\033[0m-Command\n\033[32;1m2\033[0m-Supper Command\n\033[32;1m3\033[0m-Uploadfile'''

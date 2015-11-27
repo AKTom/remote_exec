@@ -18,13 +18,10 @@ def startThread(data,TARGET,ARGS):
     for a in data:
         args_1=(a['ip'],int(a['port']),a['username'],a['password'])
         args_2=list(args_1)
-#        print type(ARGS),ARGS
         for i in list(ARGS):
-#            print type(i),i
             if not i:continue
             args_2.append(i)
         args=tuple(args_2)
-#        print type(args),args
         th=threading.Thread(target=TARGET,args=args)
         res_list.append(th)
         th.start()
@@ -42,11 +39,10 @@ def cmdInput(function,otherArgs=''):
         if not tmp:continue
         elif (tmp=='q' or tmp=='quit' or tmp=='exit'):
             print "You quit the command mode"
-            return man()
+            break
         elif (tmp != 'end'):
            cmd +=tmp + '\n'
            continue
-#        print type(cmd),cmd
         startThread(data,function,(cmd,otherArgs))
         cmd=''
 def transfer():
@@ -56,21 +52,21 @@ def transfer():
         if not local_dir:continue
         if (local_dir=='q' or local_dir=='quit' or local_dir=='exit'):
             print "You give up the transfer files"
-            return man()
+            break
         remote_dir=raw_input('Please enter the \033[33;1mremote directory  \033[0m').strip()
         while not remote_dir:remote_dir=raw_input('Please enter the \033[33;1mremote directory  \033[0m').strip()
         if (remote_dir=='q' or remote_dir=='quit' or remote_dir=='exit'):
             print "You give up the transfer files"
-            return man()
+            break
         f=raw_input('Please enter a local \033[33;1mfile name  \033[0m').strip()
         while not f:f=raw_input('Please enter a local \033[33;1mfile name  \033[0m').strip()
         if (f=='q' or f=='quit' or f=='exit'):
             print "You give up the transfer files"
-            return man()
+            break
         startThread(data,scp_cmd.scp,(f,local_dir,remote_dir,))
         continue
 def getHost():
-    while not data:
+    while 1:
         hostInput=(raw_input('\033[32;1mPlease enter your hosts \033[0m').strip()).split(',')
         if hostInput[0]=='':continue
         if (str(hostInput[0])=='q' or str(hostInput[0])=='quit' or str(hostInput[0])=='exit'):
@@ -87,15 +83,13 @@ def getHost():
                 tmpData=list(n.fetchall())
                 for tmp in tmpData:
                     data.append(tmp)
-    return data
+        return data
 def man():
-    getHost()
-    #print data
     for ip_list in data:
         print ip_list["ip"]
     print '''\033[32;1m1\033[0m-Command\n\033[32;1m2\033[0m-Supper Command\n\033[32;1m3\033[0m-Uploadfile'''
     option=''
-    while not option:
+    while 1:
         option=raw_input('\033[32;1mWhat do you do?Please choose 1,2 or 3... \033[0m').strip()
         if not option:continue
         if (option=='q' or option=='quit' or option=='exit'):
@@ -111,5 +105,7 @@ def man():
 if __name__ == '__main__':
     n=mysql_conn.MySQL('localhost','tools','123456')
     n.selectDb('tools')
-    data=[]
-    man()
+    while 1:
+        data=[]
+        getHost()
+        man()

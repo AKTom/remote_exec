@@ -29,13 +29,13 @@ def startThread(data,TARGET,ARGS):
         th.join()
     print "\033[35;1mThis task is complete!!!\033[0m"
 def cmdInput(function,otherArgs=''):
-    print 'You choose 2,Now began to execute the \033[32;1mShell\033[0m command...'
+    print 'Now you can execute shell commands \033[32;1mShell\033[0m command...'
     cmd=''
     if not otherArgs:Prompt='$'
     else:Prompt='#'
     while True:
         tmp=''
-        tmp=raw_input('\033[33;1mPlease enter your command ]\033[0m'+Prompt+' ').strip()
+        tmp=raw_input('\033[33;1mYour command ]\033[0m'+Prompt+' ').strip()
         if not tmp:continue
         elif (tmp=='q' or tmp=='quit' or tmp=='exit'):
             print "You quit the command mode"
@@ -46,20 +46,20 @@ def cmdInput(function,otherArgs=''):
         startThread(data,function,(cmd,otherArgs))
         cmd=''
 def transfer():
-    print 'You choose 1,Now began to transfer files...'
+    print 'Upload file ready...'
     while 1:
-        local_dir=raw_input('Please enter the \033[33;1mlocal directory  \033[0m').strip()
+        local_dir=raw_input('\033[33;1mlocal directory \033[0m').strip()
         if not local_dir:continue
         if (local_dir=='q' or local_dir=='quit' or local_dir=='exit'):
             print "You give up the transfer files"
             break
-        remote_dir=raw_input('Please enter the \033[33;1mremote directory  \033[0m').strip()
-        while not remote_dir:remote_dir=raw_input('Please enter the \033[33;1mremote directory  \033[0m').strip()
+        remote_dir=raw_input('\033[33;1mremote directory \033[0m').strip()
+        while not remote_dir:remote_dir=raw_input('\033[33;1mremote directory \033[0m').strip()
         if (remote_dir=='q' or remote_dir=='quit' or remote_dir=='exit'):
             print "You give up the transfer files"
             break
-        f=raw_input('Please enter a local \033[33;1mfile name  \033[0m').strip()
-        while not f:f=raw_input('Please enter a local \033[33;1mfile name  \033[0m').strip()
+        f=raw_input('\033[33;1mfile name  \033[0m').strip()
+        while not f:f=raw_input('\033[33;1mfile name \033[0m').strip()
         if (f=='q' or f=='quit' or f=='exit'):
             print "You give up the transfer files"
             break
@@ -67,7 +67,7 @@ def transfer():
         continue
 def getHost():
     while 1:
-        hostInput=(raw_input('\033[32;1mPlease enter your hosts \033[0m').strip()).split(',')
+        hostInput=(raw_input('\033[32;1mYour host(s) \033[0m').strip()).split(',')
         if hostInput[0]=='':continue
         if (str(hostInput[0])=='q' or str(hostInput[0])=='quit' or str(hostInput[0])=='exit'):
             print "Program has quit"
@@ -78,7 +78,7 @@ def getHost():
                 if column is None:
                     print "\033[31;1m%s is not exist\033[0m" %(HOST)
                     continue
-                print "Matching: \033[35;1m%s \033[0mlike \033[35;1m%s \033[0m ..." %(column,HOST)
+                print "Match: \033[35;1m%s \033[0mlike \033[35;1m%s \033[0m ..." %(column,HOST)
                 n.query('*','tool_ip',column,HOST)
                 tmpData=list(n.fetchall())
                 for tmp in tmpData:
@@ -87,10 +87,9 @@ def getHost():
 def man():
     for ip_list in data:
         print ip_list["ip"]
-    print '''\033[32;1m1\033[0m-Command\n\033[32;1m2\033[0m-Super Command\n\033[32;1m3\033[0m-Uploadfile'''
     option=''
     while 1:
-        option=raw_input('\033[32;1mWhat do you do?Please choose 1,2 or 3... \033[0m').strip()
+        option=raw_input('\033[32;1m1\033[0m-Command\n\033[32;1m2\033[0m-Super Command\n\033[32;1m3\033[0m-Uploadfile\n\033[32;1mPlease choose 1,2 or 3... \033[0m').strip()
         if not option:continue
         if (option=='q' or option=='quit' or option=='exit'):
             break

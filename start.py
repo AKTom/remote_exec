@@ -87,7 +87,7 @@ def getHost():
 def man():
     for ip_list in data:
         print ip_list["ip"]
-    print '''\033[32;1m1\033[0m-Command\n\033[32;1m2\033[0m-Supper Command\n\033[32;1m3\033[0m-Uploadfile'''
+    print '''\033[32;1m1\033[0m-Command\n\033[32;1m2\033[0m-Super Command\n\033[32;1m3\033[0m-Uploadfile'''
     option=''
     while 1:
         option=raw_input('\033[32;1mWhat do you do?Please choose 1,2 or 3... \033[0m').strip()
@@ -98,7 +98,7 @@ def man():
             cmdInput(ssh_cmd.ssh)
         if option=='2':
             rootpd=''
-            while not rootpd:rootpd=getpass.getpass('Enter Supper password: ')
+            while not rootpd:rootpd=getpass.getpass('Enter Super password: ')
             cmdInput(ssh_cmd.sshChannel,rootpd)
         if option=='3':
             transfer()

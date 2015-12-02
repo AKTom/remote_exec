@@ -1,17 +1,34 @@
-#!/usr/bin/python
-import sys
-import readline
-import rlcompleter
 import atexit
 import os
-# tab completion
-readline.parse_and_bind('tab: complete')
-# history file
-histfile = os.path.join(os.environ['HOME'], '.pythonhistory')
-try:
-    readline.read_history_file(histfile)
-except IOError:
-    pass
-atexit.register(readline.write_history_file, histfile)
+import readline
+import rlcompleter
+
+
+
+class TabCompleter(rlcompleter.Completer):
+    """Completer that supports indenting"""
+    def complete(self, text, state):
+        if not text:
+            return ('    ', None)[state]
+        else:
+            return rlcompleter.Completer.complete(self, text, state)
+
+#readline.set_completer(TabCompleter().complete)
+
+# for Mac OS X
+if 'libedit' in readline.__doc__:
+    readline.parse_and_bind("bind ^I rl_complete")
+else:
+    readline.parse_and_bind("tab: complete")
  
-del os, histfile, readline, rlcompleter
+historyPath = os.path.expanduser("~/.pyhistory")
+ 
+def save_history(historyPath=historyPath):
+    import readline
+    readline.write_history_file(historyPath)
+ 
+if os.path.exists(historyPath):
+    readline.read_history_file(historyPath)
+ 
+atexit.register(save_history)
+del os, atexit, readline, rlcompleter, save_history, historyPath

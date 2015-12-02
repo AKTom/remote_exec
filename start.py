@@ -29,7 +29,7 @@ def startThread(data,TARGET,ARGS):
         th.join()
     print "\033[35;1mThis task is complete!!!\033[0m"
 def cmdInput(function,otherArgs=''):
-    print 'Now you can execute shell commands \033[32;1mShell\033[0m command...'
+    print 'Now you can execute \033[32;1mShell\033[0m Commands...'
     cmd=''
     if not otherArgs:Prompt='$'
     else:Prompt='#'

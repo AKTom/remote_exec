@@ -11,11 +11,11 @@ def ssh(ip,port,user,passwd,cmd):
        client.connect(ip, port, user, passwd, timeout=20)  
        stdin, stdout, stderr = client.exec_command(cmd)  
        for line in stdout:  
-           print "\033[36;1m%-18s-->>  \033[0m" %ip +line.strip('\n')  
+           print "\b\033[36;1m%-18s|***|  \033[0m" %ip + line.strip('\n')
        for line in stderr:  
-           print "\033[36;1m%-18s-->>  \033[0m" %ip +line.strip('\n')  
+           print "\b\033[36;1m%-18s|***|  \033[0m" %ip +line.strip('\n')  
     except Exception,e:
-        print "\033[31;1m%-18s%s:%s\033[0m" % (ip,e.__class__, e)
+        print "\b\033[31;1m%-18s%s:%s\033[0m" % (ip,e.__class__, e)
     client.close()  
 
 #=============================
@@ -37,7 +37,7 @@ def sshChannel(ip,port,user,passwd,cmd,rootpd):
            try:
               resp = channel.recv(9999)
            except Exception,e:
-              print '\033[31;1m%-18sError info:%s connection time.\033[0m' % (ip,str(e))
+              print '\b\033[31;1m%-18sError info:%s connection time.\033[0m' % (ip,str(e))
               channel.close()
               client.close()
               sys.exit()
@@ -48,7 +48,7 @@ def sshChannel(ip,port,user,passwd,cmd,rootpd):
            resp = channel.recv(9999)
            #if not resp.find('$ ')==-1:
            if resp.endswith('$ '):
-              print '\033[31;1m%-18sError info: (Super)Authentincation failed.\033[0m' % (ip)
+              print '\b\033[31;1m%-18sError info: (Super)Authentincation failed.\033[0m' % (ip)
               channel.close()
               client.close()
               sys.exit()
@@ -65,7 +65,7 @@ def sshChannel(ip,port,user,passwd,cmd,rootpd):
        client.close()
 #       print buff.split('\r\n')
        for i in (buff.split('\r\n'))[1:]:
-           if not i.endswith('# '):print "\033[36;1m%-18s-->>  \033[0m" %ip + i
+           if not i.endswith('# '):print "\b\033[36;1m%-18s|***|  \033[0m" %ip + i
     except Exception,e:
-        print "\033[31;1m%-18s%s:%s\033[0m" % (ip,e.__class__, e)
+        print "\b\033[31;1m%-18s%s:%s\033[0m" % (ip,e.__class__, e)
     client.close() 

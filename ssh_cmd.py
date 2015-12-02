@@ -3,12 +3,19 @@
 import paramiko
 import os,sys
 
+KEY='/Users/meilinli/.ssh/id_rsa'
+
+if KEY != '':
+    PKEY=paramiko.RSAKey.from_private_key_file(KEY)
+
 def ssh(ip,port,user,passwd,cmd):  
 #    print type(cmd),cmd
     client = paramiko.SSHClient()  
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())  
     try:
-       client.connect(ip, port, user, passwd, timeout=20)  
+       if KEY != '':
+           client.connect(ip, port, user, passwd, timeout=20, pkey=PKEY)  
+       else:client.connect(ip, port, user, passwd, timeout=20)
        stdin, stdout, stderr = client.exec_command(cmd)  
        for line in stdout:  
            print "\b\033[36;1m%-18s|***|  \033[0m" %ip + line.strip('\n')
@@ -25,8 +32,9 @@ def sshChannel(ip,port,user,passwd,cmd,rootpd):
     client = paramiko.SSHClient()  
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())  
     try:
-       client.connect(ip, port, user, passwd, timeout=20)  
-
+       if KEY != '':
+           client.connect(ip, port, user, passwd, timeout=20, pkey=PKEY)  
+       else:client.connect(ip, port, user, passwd, timeout=20)
        channel = client.invoke_shell()
        channel.settimeout(10)
 

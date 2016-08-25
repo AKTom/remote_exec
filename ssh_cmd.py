@@ -3,40 +3,43 @@
 import paramiko
 import os,sys
 
-KEY='/Users/meilinli/.ssh/id_rsa'
+# your config
+#=================================
+SshKey='/Users/meilinli/.ssh/id_rsa'
+#==================================
 
-if KEY != '':
-    PKEY=paramiko.RSAKey.from_private_key_file(KEY)
+if SshKey != '':
+    PKEY=paramiko.RSAKey.from_private_key_file(SshKey)
 
-def ssh(ip,port,user,passwd,cmd):  
+def ssh(ip,port,user,passwd,cmd):
 #    print type(cmd),cmd
-    client = paramiko.SSHClient()  
-    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())  
+    client = paramiko.SSHClient()
+    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     try:
-       if KEY != '':
-           client.connect(ip, port, user, passwd, timeout=20, pkey=PKEY)  
+       if SshKey != '':
+           client.connect(ip, port, user, passwd, timeout=20, pkey=PKEY)
        else:client.connect(ip, port, user, passwd, timeout=20)
-       stdin, stdout, stderr = client.exec_command(cmd)  
-       for line in stdout:  
+       stdin, stdout, stderr = client.exec_command(cmd)
+       for line in stdout:
            print "\b\033[36;1m%-18s|***|  \033[0m" %ip + line.strip('\n')
-       for line in stderr:  
-           print "\b\033[36;1m%-18s|***|  \033[0m" %ip +line.strip('\n')  
+       for line in stderr:
+           print "\b\033[36;1m%-18s|***|  \033[0m" %ip +line.strip('\n')
     except Exception,e:
         print "\b\033[31;1m%-18s%s:%s\033[0m" % (ip,e.__class__, e)
-    client.close()  
+    client.close()
 
 #=============================
 
-def sshChannel(ip,port,user,passwd,cmd,rootpd):  
+def sshChannel(ip,port,user,passwd,cmd,rootpd):
     passinfo = 'Password: '
-    client = paramiko.SSHClient()  
-    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())  
+    client = paramiko.SSHClient()
+    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     try:
-       if KEY != '':
-           client.connect(ip, port, user, passwd, timeout=20, pkey=PKEY)  
+       if SshKey != '':
+           client.connect(ip, port, user, passwd, timeout=20, pkey=PKEY)
        else:client.connect(ip, port, user, passwd, timeout=20)
        channel = client.invoke_shell()
-       channel.settimeout(10)
+       channel.settimeout(90)
 
        channel.send('su -\n')
        buff = ''
@@ -76,4 +79,4 @@ def sshChannel(ip,port,user,passwd,cmd,rootpd):
            if not i.endswith('# '):print "\b\033[36;1m%-18s|***|  \033[0m" %ip + i
     except Exception,e:
         print "\b\033[31;1m%-18s%s:%s\033[0m" % (ip,e.__class__, e)
-    client.close() 
+    client.close()

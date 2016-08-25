@@ -3,6 +3,7 @@
 #__author__ = 'li90.com'
 import threading
 import mysql_conn
+import sqlite3_conn
 import ssh_cmd
 import sys
 import getpass
@@ -10,7 +11,8 @@ import scp_cmd
 import tab
 def whichColumn(likeString):
     for likeColumn in ('ip','hostname','mark'):
-        if n.query('ip','tool_ip',likeColumn,likeString):
+        n.query('ip','tool_ip',likeColumn,likeString)
+        if n.fetchall():
             return likeColumn
             break
 def startThread(data,TARGET,ARGS):
@@ -102,8 +104,13 @@ def man():
         if option=='3':
             transfer()
 if __name__ == '__main__':
-    n=mysql_conn.MySQL('localhost','tools','123456')
-    n.selectDb('tools')
+    #	mysql
+#    n=mysql_conn.MySQL('localhost','tools','123456')
+#    n.selectDb('tools')
+    #	sqlite3
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
+    n=sqlite3_conn.SQLite('/Users/meilinli/360云盘/python小脚本/newproject/tools.db')
     while 1:
         data=[]
         getHost()
